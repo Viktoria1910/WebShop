@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prijava - Nuvion WebShop</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body { padding-top: 100px; background: #0f001a; }
+    @media (max-width: 768px) { body { padding-top: 80px; } }
+
+    .form-container {
+      max-width: 400px;
+      margin: 3rem auto;
+      background: rgba(20, 0, 40, 0.92);
+      padding: 2.5rem 2rem;
+      border-radius: 18px;
+      border: 1px solid #9f54ff;
+      box-shadow: 0 0 35px rgba(159, 84, 255, 0.5);
+      backdrop-filter: blur(12px);
+    }
+
+    .form-container h2 {
+      color: #e0ccff;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-size: 1.9rem;
+      font-weight: 800;
+      text-shadow: 0 0 15px #9f54ff;
+    }
+
+    /* Kompaktni razmaci – isto kao na registraciji */
+    .form-container > form > * { margin-bottom: 0.75rem !important; }
+    .form-container label { 
+      color: #c724ff !important;
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.3rem !important;
+    }
+
+    .form-container input {
+      background: rgba(255,255,255,0.08) !important;
+      border: 1px solid #9f54ff !important;
+      color: white !important;
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      font-size: 0.95rem;
+    }
+
+    .form-container input:focus {
+      box-shadow: 0 0 20px rgba(199, 36, 255, 0.7) !important;
+      border-color: #e945e9 !important;
+      background: rgba(255,255,255,0.15) !important;
+    }
+
+    .password-wrapper {
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #b794ff;
+      font-size: 1.15rem;
+      z-index: 10;
+    }
+
+    .toggle-password:hover { color: #e945e9; }
+
+    .btn-primary {
+      width: 100%;
+      padding: 0.9rem;
+      font-size: 1.05rem;
+      font-weight: bold;
+      background: linear-gradient(45deg, #9f54ff, #c724ff);
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(199, 36, 255, 0.7);
+      transition: all 0.4s;
+      margin-top: 0.8rem !important;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 0 50px rgba(233, 69, 233, 0.9);
+    }
+
+    .message.success { color: #0f0; text-shadow: 0 0 10px #0f0; }
+    .message.error { color: #ff3366; text-shadow: 0 0 10px #ff0066; }
+  </style>
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+  <main class="form-container">
+    <h2>Prijava</h2>
+    
+    <form id="loginForm" novalidate>
+      <label for="email">E-mail</label>
+      <input type="email" id="email" name="email" required placeholder="tvoj@email.com">
+
+      <label for="lozinka">Lozinka</label>
+      <div class="password-wrapper">
+        <input type="password" id="lozinka" name="lozinka" required minlength="6">
+        <i class="fas fa-eye toggle-password" onclick="togglePass('lozinka')"></i>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Prijavi se</button>
+    </form>
+
+    <p class="text-center mt-4 text-light small">
+      Nemate račun? <a href="registration.html" style="color:#e945e9; text-decoration:underline;">Registrirajte se ovdje</a>
+    </p>
+
+    <div id="loginMessage" class="message text-center mt-3"></div>
+  </main>
+
+  <div id="footer"></div>
+
+  <!-- Skripte -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
+
+  <script>
+    // Prikaz/sakrivanje lozinke
+    function togglePass(id) {
+      const input = document.getElementById(id);
+      const icon = input.nextElementSibling;
+      if (input.type === "password") {
+        input.type = "text";
+        icon.classList.replace("fa-eye", "fa-eye-slash");
+      } else {
+        input.type = "password";
+        icon.classList.replace("fa-eye-slash", "fa-eye");
+      }
+    }
+  </script>
+</body>
+</html>

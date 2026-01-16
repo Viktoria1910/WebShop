@@ -1,0 +1,43 @@
+<!-- navbar.html – FINALNA ČISTA VERZIJA -->
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container-fluid">
+
+    <!-- Logo -->
+    <a href="index.html" class="navbar-brand">
+      <img src="img/logo.png" alt="Nuvion" height="50">
+    </a>
+
+    <!-- Hamburger -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbarCollapse"
+      aria-controls="mainNavbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Sve ostalo -->
+    <div class="collapse navbar-collapse" id="mainNavbarCollapse">
+
+      <!-- Lijevi linkovi -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item"><a class="nav-link" href="index.html">Početna</a></li>
+        <li class="nav-item"><a class="nav-link" href="products.html">Proizvodi</a></li>
+        <li class="nav-item"><a class="nav-link" href="contact.html">Kontakt</a></li>
+      </ul>
+
+      <!-- PRETRAGA – centrirana samo na desktopu -->
+      <div class="navbar-nav mx-auto d-none d-lg-flex">
+        <form class="d-flex" role="search">
+          <input class="form-control me-2" type="search" placeholder="Pretraži proizvode..." 
+                 style="min-width: 700px; background:rgba(255,255,255,0.1); border:1px solid #9f54ff; color:white;">
+          <button class="btn btn-outline-primary" type="submit">Pretraži</button>
+        </form>
+      </div>
+
+      <!-- PRIJAVA + REGISTRACIJA – identični neon gumbi -->
+      <div class="d-flex align-items-center gap-3">
+        <a href="login.html" class="btn btn-primary">Prijava</a>
+        <a href="registration.html" class="btn btn-primary">Registracija</a>
+      </div>
+
+    </div>
+  </div>
+</nav>

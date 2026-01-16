@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <script type="module" src="js/firebase-config.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Košarica - Nuvion WebShop</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body { padding-top: 90px; background: #0f001a; color: #e0ccff; }
+    @media (max-width: 768px) { body { padding-top: 80px; } }
+
+    h1 {
+      text-align: center;
+      margin: 3rem 0 4rem;
+      font-size: 4rem;
+      text-transform: uppercase;
+      letter-spacing: 8px;
+      background: linear-gradient(45deg, #8e44ad, #9f54ff, #c724ff, #9f54ff, #8e44ad);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 40px rgba(159,84,255,0.7);
+      animation: plavaLjubicasta 6s ease-in-out infinite;
+    }
+    @keyframes plavaLjubicasta { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+
+    .cart-card {
+      background: rgba(30,10,60,0.95);
+      border: 2px solid #9f54ff;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 0 60px rgba(159,84,255,0.5);
+      backdrop-filter: blur(15px);
+    }
+
+    .cart-header {
+      background: linear-gradient(90deg, #9f54ff, #c724ff);
+      color: white;
+      padding: 1.2rem;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .cart-item {
+      padding: 1.2rem;
+      border-bottom: 1px solid rgba(159,84,255,0.3);
+      transition: all 0.3s;
+    }
+    .cart-item:hover { background: rgba(159,84,255,0.15); }
+
+    .product-name { font-weight: 700; color: #fff; font-size: 1.2rem; }
+    .price { color: #c724ff; font-weight: bold; font-size: 1.3rem; text-shadow: 0 0 15px #c724ff; }
+
+    /* + / – gumbi */
+    .qty-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid #9f54ff;
+      border-radius: 50px;
+      padding: 6px 10px;
+      width: 130px;
+      margin: 0 auto;
+    }
+    .qty-btn {
+      background: transparent;
+      border: none;
+      color: #c724ff;
+      font-size: 1.6rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+    .qty-btn:hover {
+      background: #c724ff;
+      color: white;
+      transform: scale(1.15);
+      box-shadow: 0 0 20px #c724ff;
+    }
+    .qty-number {
+      width: 40px;
+      text-align: center;
+      font-weight: bold;
+      color: white;
+    }
+
+    .remove-btn {
+      background: transparent;
+      border: 2px solid #ff3366;
+      color: #ff3366;
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      font-size: 1.3rem;
+      transition: all 0.4s;
+    }
+    .remove-btn:hover {
+      background: #ff3366;
+      color: white;
+      transform: scale(1.2);
+      box-shadow: 0 0 25px #ff3366;
+    }
+
+    .item-total { color: #c724ff; font-size: 1.5rem; font-weight: bold; text-shadow: 0 0 20px #c724ff; }
+
+    .cart-summary {
+      padding: 2rem;
+      text-align: right;
+      background: rgba(20,0,40,0.9);
+    }
+    .total-amount {
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: #c724ff;
+      text-shadow: 0 0 40px #c724ff;
+    }
+    .checkout-btn {
+      background: linear-gradient(45deg, #9f54ff, #c724ff);
+      border: none;
+      padding: 1.3rem 4rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+      border-radius: 50px;
+      box-shadow: 0 0 60px rgba(199,36,255,0.9);
+      transition: all 0.4s;
+      margin-top: 1rem;
+    }
+    .checkout-btn:hover {
+      transform: translateY(-8px) scale(1.05);
+      box-shadow: 0 0 90px rgba(233,69,233,1);
+    }
+
+    .empty-cart {
+      text-align: center;
+      padding: 6rem 2rem;
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+    }
+    .empty-cart h2 {
+      font-size: 2.8rem;
+      color: #b794ff;
+      text-shadow: 0 0 30px #9f54ff;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+  <div class="container">
+    <h1>Tvoja košarica</h1>
+    <div id="cart-content"></div>
+  </div>
+
+  <div id="footer"></div>
+
+  <!-- Fiksna košarica -->
+  <div class="cart-float">
+    <a href="cart.html" title="Košarica">
+      <i class="fas fa-shopping-cart"></i>
+      <span class="badge" id="cart-count-float">0</span>
+    </a>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/main.js"></script>
+
+  <script>
+    function updateCartCount() {
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      const total = cart.reduce((s, i) => s + i.qty, 0);
+      document.getElementById("cart-count-float").textContent = total;
+    }
+
+    function renderCart() {
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      const container = document.getElementById("cart-content");
+
+      if (cart.length === 0) {
+        container.innerHTML = `
+          <div class="empty-cart">
+  <h2>Tvoja košarica je prazna.</h2>
+  <a href="products.html" class="checkout-btn" style="color:white !important;">
+    Idi u kupovinu
+  </a>
+</div>`;
+        return;
+      }
+
+      let totalPrice = 0;
+      let html = `<div class="cart-card">`;
+
+      // Header
+      html += `
+        <div class="cart-header row text-center">
+          <div class="col-4">Proizvod</div>
+          <div class="col-2">Cijena</div>
+          <div class="col-3">Količina</div>
+          <div class="col-2">Ukupno</div>
+          <div class="col-1"></div>
+        </div>`;
+
+      // Stavke
+      cart.forEach((item, index) => {
+        const itemTotal = item.price * item.qty;
+        totalPrice += itemTotal;
+
+        html += `
+          <div class="cart-item row align-items-center text-center">
+            <div class="col-4">
+              <span class="product-name">${item.name}</span>
+            </div>
+            <div class="col-2">
+              <span class="price">${item.price.toFixed(2)} €</span>
+            </div>
+            <div class="col-3">
+              <div class="qty-controls">
+                <button class="qty-btn" onclick="changeQty(${index}, -1)">–</button>
+                <span class="qty-number">${item.qty}</span>
+                <button class="qty-btn" onclick="changeQty(${index}, 1)">+</button>
+              </div>
+            </div>
+            <div class="col-2">
+              <span class="item-total">${itemTotal.toFixed(2)} €</span>
+            </div>
+            <div class="col-1">
+              <button class="remove-btn" onclick="removeItem(${index})">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>`;
+      });
+
+      // Ukupno
+      html += `
+        <div class="cart-summary">
+          <h3>Ukupno: <span class="total-amount">${totalPrice.toFixed(2)} €</span></h3>
+          <button class="checkout-btn">Kupi sada</button>
+        </div></div>`;
+
+      container.innerHTML = html;
+    }
+
+    function changeQty(index, delta) {
+      let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      cart[index].qty += delta;
+      if (cart[index].qty <= 0) {
+        cart.splice(index, 1);  // ako padne na 0, briše se
+      }
+      localStorage.setItem("cart", JSON.stringify(cart));
+      updateCartCount();
+      renderCart();
+    }
+
+    function removeItem(index) {
+      let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      updateCartCount();
+      renderCart();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      updateCartCount();
+      renderCart();
+    });
+  </script>
+</body>
+</html>

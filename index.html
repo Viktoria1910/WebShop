@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <script type="module" src="js/firebase-config.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Početna - Nuvion WebShop</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
+  <style>
+    body {
+      padding-top: 90px;
+      background: #0f001a;
+      color: #e0ccff;
+      overflow-x: hidden;
+    }
+    @media (max-width: 768px) { body { padding-top: 80px; } }
+
+    /* HERO – prava cyberpunk zvijer */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background: radial-gradient(circle at 30% 70%, #1a0033 0%, #0f001a 50%, #000000 100%);
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 800px; height: 800px;
+      background: radial-gradient(circle, rgba(199,36,255,0.4) 0%, transparent 60%);
+      top: -300px; right: -200px;
+      border-radius: 50%;
+      animation: pulse 10s infinite;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      width: 1000px; height: 1000px;
+      background: radial-gradient(circle, rgba(159,84,255,0.3) 0%, transparent 70%);
+      bottom: -400px; left: -300px;
+      border-radius: 50%;
+      animation: pulse 15s infinite reverse;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.6; }
+      50% { transform: scale(1.3); opacity: 0.9; }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .hero h1 {
+      font-size: 4.8rem;
+      font-weight: 900;
+      background: linear-gradient(90deg, #c724ff, #e945e9, #9f54ff, #c724ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 40px rgba(199,36,255,0.7);
+      letter-spacing: 3px;
+      margin-bottom: 1.5rem;
+      animation: glow 4s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from { filter: hue-rotate(0deg); }
+      to { filter: hue-rotate(30deg); }
+    }
+
+    .hero p.lead {
+      font-size: 1.6rem;
+      color: #b794ff;
+      text-shadow: 0 0 20px rgba(183,148,255,0.6);
+      margin-bottom: 3rem;
+      font-weight: 500;
+    }
+
+    .btn-cta {
+      background: linear-gradient(45deg, #9f54ff, #c724ff);
+      border: none;
+      padding: 1.3rem 3.5rem;
+      font-size: 1.4rem;
+      font-weight: bold;
+      border-radius: 50px;
+      color: white;
+      text-shadow: 0 0 15px rgba(0,0,0,0.5);
+      box-shadow: 0 0 40px rgba(199,36,255,0.8);
+      transition: all 0.4s;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .btn-cta:hover {
+      transform: translateY(-10px) scale(1.08);
+      box-shadow: 0 0 80px rgba(233,69,233,0.9);
+      background: linear-gradient(45deg, #c724ff, #e945e9);
+    }
+
+    /* Fiksna košarica – malo ljepše */
+    .cart-float a {
+      width: 80px;
+      height: 80px;
+      font-size: 2.4rem;
+      border: 4px solid rgba(255,255,255,0.3);
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.5rem; }
+      .hero p.lead { font-size: 1rem; }
+      .btn-cta { padding: 1rem 2.5rem; font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="navbar"></div>
+
+  <!-- HERO SEKCIJA -->
+  <section class="hero">
+    <div class="hero-content container">
+      <h1>Nuvion – new vision of innovation</h1>
+      <p class="lead">Najbolji tehnološki proizvodi po najboljim cijenama.</p>
+      <a href="products.html" class="btn btn-cta">
+        Pogledaj ponudu
+      </a>
+    </div>
+  </section>
+
+  <div id="footer"></div>
+
+  <!-- FIKSNA KOŠARICA – samo Font Awesome ikonica kolica -->
+<div class="cart-float">
+  <a href="cart.html" title="Košarica">
+    <i class="fas fa-shopping-cart"></i>
+    <span class="badge" id="cart-count-float">0</span>
+  </a>
+</div>
+
+<style>
+  .cart-float {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 9999;
+  }
+
+  .cart-float a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    background: rgba(159, 84, 255, 0.2);
+    border: 2px solid #9f54ff;
+    border-radius: 50%;
+    color: #c724ff;
+    font-size: 1.8rem;
+    text-decoration: none;
+    box-shadow: 0 0 30px rgba(159, 84, 255, 0.6);
+    backdrop-filter: blur(10px);
+    transition: all 0.4s ease;
+    position: relative;
+  }
+
+  .cart-float a:hover {
+    background: rgba(199, 36, 255, 0.4);
+    border-color: #e945e9;
+    color: #ffffff;
+    transform: translateY(-8px) scale(1.1);
+    box-shadow: 0 0 50px rgba(233, 69, 233, 0.8);
+  }
+
+  .cart-float .badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #ff0066;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: bold;
+    min-width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px #ff0066;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+  }
+
+  @media (max-width: 576px) {
+    .cart-float a { width: 58px; height: 58px; font-size: 1.6rem; }
+  }
+</style>
+
+  <!-- Skripte -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
+
+  <script>
+    // Ažuriranje broja u košarici
+    function updateCartCount() {
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      const count = cart.reduce((sum, item) => sum + item.qty, 0);
+      const badge = document.getElementById("cart-count-float");
+      if (badge) badge.textContent = count;
+    }
+
+    document.addEventListener("DOMContentLoaded", updateCartCount);
+    window.addEventListener("storage", updateCartCount);
+  </script>
+</body>
+</html>
