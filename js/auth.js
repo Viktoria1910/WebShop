@@ -1,64 +1,50 @@
-/* js/auth.js */
+import { auth, db } from './firebase-config.js';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
 document.addEventListener("DOMContentLoaded", () => {
-  // Registracija
+  // REGISTRACIJA
   const registerForm = document.getElementById("registerForm");
   if (registerForm) {
     registerForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const data = {
-        ime: registerForm.ime.value.trim(),
-        email: registerForm.email.value.trim(),
-        lozinka: registerForm.lozinka.value,
-        uloga: registerForm.uloga.value
-      };
+      const email = registerForm.email.value.trim();
+      const lozinka = registerForm.lozinka.value;
+      const ime = registerForm.ime.value.trim();
 
       try {
-        const res = await fetch("api/korisnici.php?action=register", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data)
-        });
-        const result = await res.json();
+        const userCredential = await createUserWithEmailAndPassword(auth, email, lozinka);
+        const user = userCredential.user;
 
-        const msg = document.getElementById("registerMessage");
-        msg.textContent = result.message;
-        msg.className = "message " + (result.success ? "success" : "error");
+        // Spremanje korisnika u bazu kao običnog korisnika (role: user)
+        await setDoc(doc(db, "users", user.uid), {
+    ime: ime,
+    prezime: prezime,
+    email: user.email,
+    role: uloga // Ovo sprema ono što je odabrano u formi
+});
 
-        if (result.success) registerForm.reset();
+        alert("Registracija uspješna! UID je spremljen u bazu.");
+        window.location.href = "login.html";
       } catch (err) {
-        console.error(err);
+        alert("Greška: " + err.message);
       }
     });
   }
 
-  // Prijava
+  // PRIJAVA
   const loginForm = document.getElementById("loginForm");
   if (loginForm) {
     loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const data = {
-        email: loginForm.email.value.trim(),
-        lozinka: loginForm.lozinka.value
-      };
+      const email = loginForm.email.value.trim();
+      const lozinka = loginForm.lozinka.value;
 
       try {
-        const res = await fetch("api/korisnici.php?action=login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data)
-        });
-        const result = await res.json();
-
-        const msg = document.getElementById("loginMessage");
-        msg.textContent = result.message;
-        msg.className = "message " + (result.success ? "success" : "error");
-
-        if (result.success) {
-          localStorage.setItem("user", JSON.stringify(result.user));
-          window.location.href = "index.html";
-        }
+        await signInWithEmailAndPassword(auth, email, lozinka);
+        window.location.href = "index.html";
       } catch (err) {
-        console.error(err);
+        alert("Pogrešna prijava: " + err.message);
       }
     });
   }

@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="hr">
 <head>
   <meta charset="UTF-8">
@@ -9,31 +10,66 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
     body { padding-top: 90px; background: #0f001a; color: #e0ccff; }
-    .back-btn { color: #b794ff; text-decoration: none; font-size: 1.1rem; margin: 1rem 0; display: inline-block; }
-    .back-btn:hover { color: #e945e9; }
+    .back-btn { color: #b794ff; text-decoration: none; font-size: 1.1rem; margin: 1rem 0; display: inline-block; transition: 0.3s; }
+    .back-btn:hover { color: #e945e9; transform: translateX(-5px); }
 
-    .product-detail { max-width: 1100px; margin: 2rem auto; background: rgba(30,10,60,0.95); border-radius: 20px; overflow: hidden; border: 2px solid #9f54ff; box-shadow: 0 0 60px rgba(159,84,255,0.5); backdrop-filter: blur(12px); }
-    .product-img { width: 100%; height: 380px; object-fit: cover; }
-    .product-info { padding: 2rem; }
-    .product-title { font-size: 2.4rem; font-weight: 900; background: linear-gradient(45deg, #c724ff, #e945e9); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem; }
-    .product-manufacturer { font-size: 1.2rem; color: #b794ff; margin-bottom: 1rem; }
-    .product-desc { font-size: 1.1rem; line-height: 1.6; margin-bottom: 1.2rem; max-height: 80px; overflow: hidden; }
-    .product-price { font-size: 2.8rem; color: #c724ff; text-shadow: 0 0 30px #c724ff; margin: 1rem 0; }
-    .specs-table { font-size: 0.95rem; margin-bottom: 1.5rem; }
-    .specs-table td { padding: 0.5rem 1rem; border-bottom: 1px solid rgba(159,84,255,0.3); }
-    .specs-table td:first-child { color: #c724ff; font-weight: bold; width: 45%; }
-    .btn-add-large { background: linear-gradient(45deg, #9f54ff, #c724ff); border: none; padding: 1rem 3.5rem; font-size: 1.4rem; border-radius: 50px; box-shadow: 0 0 40px rgba(199,36,255,0.8); }
-    .btn-add-large:hover { transform: translateY(-6px) scale(1.05); box-shadow: 0 0 70px rgba(233,69,233,0.9); }
+    .product-detail { 
+      max-width: 1100px; 
+      margin: 2rem auto; 
+      background: rgba(30,10,60,0.95); 
+      border-radius: 20px; 
+      overflow: hidden; 
+      border: 2px solid #9f54ff; 
+      box-shadow: 0 0 60px rgba(159,84,255,0.5); 
+      backdrop-filter: blur(12px); 
+    }
+    .product-img { width: 100%; height: 100%; min-height: 450px; object-fit: cover; }
+    .product-info { padding: 3rem; }
+    .product-title { 
+      font-size: 3rem; 
+      font-weight: 900; 
+      background: linear-gradient(45deg, #c724ff, #e945e9); 
+      -webkit-background-clip: text; 
+      background-clip: text; 
+      -webkit-text-fill-color: transparent; 
+      margin-bottom: 0.5rem; 
+    }
+    .product-manufacturer { font-size: 1.2rem; color: #b794ff; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 2px; }
+    .product-desc { font-size: 1.1rem; line-height: 1.8; margin-bottom: 2rem; color: #d1b3ff; }
+    .product-price { font-size: 3.5rem; color: #c724ff; text-shadow: 0 0 30px #c724ff; margin: 1.5rem 0; font-weight: 900; }
+    
+    .specs-table { font-size: 1rem; margin-bottom: 2rem; color: #e0ccff !important; }
+    .specs-table td { padding: 0.8rem 1rem; border-bottom: 1px solid rgba(159,84,255,0.2) !important; color: #e0ccff; }
+    .specs-table td:first-child { color: #c724ff; font-weight: bold; width: 40%; }
+    
+    .btn-add-large { 
+      background: linear-gradient(45deg, #9f54ff, #c724ff); 
+      border: none; 
+      padding: 1.2rem 4rem; 
+      font-size: 1.5rem; 
+      font-weight: bold;
+      color: white;
+      border-radius: 50px; 
+      box-shadow: 0 0 40px rgba(199,36,255,0.8); 
+      transition: all 0.4s;
+    }
+    .btn-add-large:hover { transform: translateY(-6px) scale(1.05); box-shadow: 0 0 70px rgba(233,69,233,0.9); color: white; }
   </style>
 </head>
 <body>
 
- <div id="navbar"></div> 
-    <div id="footer"></div>
+  <div id="navbar"></div> 
 
-  <div class="container">
-    <a href="products.html" class="back-btn">Back to products Povratak na proizvode</a>
-    <div class="product-detail" id="product-detail"></div>
+  <div class="container mb-5">
+    <a href="products.html" class="back-btn">
+      <i class="fas fa-arrow-left"></i> Povratak na proizvode
+    </a>
+    
+    <div class="product-detail" id="product-detail">
+      <div class="text-center p-5">
+        <div class="spinner-border text-primary" role="status"></div>
+      </div>
+    </div>
   </div>
 
   <div id="footer"></div>
@@ -45,6 +81,11 @@
     </a>
   </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script type="module" src="js/main.js"></script>
+<script type="module" src="js/auth.js"></script>
+
   <script type="module">
     import { db } from "./js/firebase-config.js";
     import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
@@ -54,21 +95,29 @@
     const container = document.getElementById("product-detail");
 
     if (!productId) {
-      container.innerHTML = "<h2 class='text-center p-5'>Nema ID-a</h2>";
-      return;
+      container.innerHTML = "<h2 class='text-center p-5'>Greška: Proizvod nije odabran.</h2>";
+    } else {
+      loadProductDetails();
     }
 
-    try {
-      const docRef = doc(db, "products", productId);
-      const docSnap = await getDoc(docRef);
+    async function loadProductDetails() {
+      try {
+        const docRef = doc(db, "products", productId);
+        const docSnap = await getDoc(docRef);
 
-      if (!docSnap.exists()) {
-        container.innerHTML = "<h2 class='text-center p-5'>Proizvod nije pronađen</h2>";
-      } else {
+        if (!docSnap.exists()) {
+          container.innerHTML = "<h2 class='text-center p-5'>Proizvod ne postoji u bazi.</h2>";
+          return;
+        }
+
         const p = docSnap.data();
         let specsHTML = "";
-        for (const [key, value] of Object.entries(p.specs || {})) {
-          specsHTML += `<tr><td>${key}</td><td>${value}</td></tr>`;
+        
+        // Dinamičko generiranje tablice specifikacija
+        if (p.specs) {
+          for (const [key, value] of Object.entries(p.specs)) {
+            specsHTML += `<tr><td>${key}</td><td>${value}</td></tr>`;
+          }
         }
 
         container.innerHTML = `
@@ -78,37 +127,60 @@
             </div>
             <div class="col-lg-7 product-info">
               <h1 class="product-title">${p.name}</h1>
-              <p class="product-manufacturer">Proizvođač: <strong>${p.manufacturer}</strong></p>
-              <p class="product-desc">${p.description}</p>
-              <table class="table specs-table"><tbody>${specsHTML}</tbody></table>
+              <p class="product-manufacturer">Proizvođač: <strong>${p.manufacturer || 'Nepoznato'}</strong></p>
+              <p class="product-desc">${p.description || 'Nema opisa.'}</p>
+              
+              <table class="table specs-table">
+                <tbody>${specsHTML}</tbody>
+              </table>
+              
               <div class="product-price">${p.price.toFixed(2)} €</div>
-              <button class="btn btn-add-large" onclick="addToCart('${docSnap.id}', '${p.name.replace(/'/g, "\\'")}', ${p.price})">
-                Dodaj u košaricu
+              
+              <button class="btn btn-add-large" id="add-to-cart-btn" onclick="addToCart('${docSnap.id}', '${p.name.replace(/'/g, "\\'")}', ${p.price})">
+                <i class="fas fa-cart-plus"></i> Dodaj u košaricu
               </button>
             </div>
           </div>
         `;
+      } catch (error) {
+        container.innerHTML = "<p class='text-center text-danger p-5'>Greška pri spajanju na Firebase.</p>";
+        console.error(error);
       }
-    } catch (error) {
-      container.innerHTML = "<p class='text-center text-danger'>Greška pri učitavanju.</p>";
-      console.error(error);
     }
 
+    // Globalna funkcija za košaricu
     window.addToCart = function(id, name, price) {
       let cart = JSON.parse(localStorage.getItem("cart") || "[]");
       const existing = cart.find(item => item.id === id);
-      if (existing) existing.qty += 1;
-      else cart.push({ id, name, price, qty: 1 });
+      
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ id, name, price, qty: 1 });
+      }
+      
       localStorage.setItem("cart", JSON.stringify(cart));
       updateCartCount();
-      alert("Dodano u košaricu!");
+
+      // Animacija gumba umjesto dosadnog alert-a
+      const btn = document.getElementById('add-to-cart-btn');
+      const originalText = btn.innerHTML;
+      btn.innerHTML = "<i class='fas fa-check'></i> Dodano!";
+      btn.style.background = "linear-gradient(45deg, #28a745, #218838)";
+      
+      setTimeout(() => {
+        btn.innerHTML = originalText;
+        btn.style.background = "";
+      }, 2000);
     };
 
-    function updateCartCount() {
+    window.updateCartCount = function() {
       const cart = JSON.parse(localStorage.getItem("cart") || "[]");
       const count = cart.reduce((s, i) => s + i.qty, 0);
-      document.getElementById("cart-count-float").textContent = count;
+      const badge = document.getElementById("cart-count-float");
+      if (badge) badge.textContent = count;
     }
+
     updateCartCount();
   </script>
 </body>
